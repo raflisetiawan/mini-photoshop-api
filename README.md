@@ -28,17 +28,26 @@ $ npm run start:prod
 
 ## Endpoint API
 
-Upload Gambar: POST /image/upload
-Tampilkan Gambar: GET /image/:imageName
-Informasi Gambar: GET /image/:imageName/info
-Convert ke Biner: GET /image-processing/convert-binary/:imageName
-Convert ke Grayscale: GET /image-processing/convert-grayscale/:imageName
-Brightness Adjustment: GET /image-processing/brighten-image/:imageName/:factor
-Operasi Aritmetika:
-Penjumlahan: GET /image-processing/add-images/:imageName1/:imageName2
-Pengurangan: GET /image-processing/subtract-images/:imageName1/:imageName2
-Operasi Geometri:
-Translasi: GET /image-processing/translate-image/:imageName/:x/:y
-Rotasi: GET /image-processing/rotate-image/:imageName/:degrees
-Flipping: GET /image-processing/flip-image/:imageName/:axis (axis: 'horizontal' atau 'vertical')
-Zooming: GET /image-processing/zoom-image/:imageName/:factor
+- **Upload Gambar:** `POST /image/upload`
+- **Tampilkan Gambar:** `GET /image/:imageName`
+- **Informasi Gambar:** `GET /image/:imageName/info`
+
+### Operasi Pengolahan Citra
+
+- **Convert ke Biner:** `GET /image-processing/convert-binary/:imageName`
+- **Convert ke Grayscale:** `GET /image-processing/convert-grayscale/:imageName`
+- **Brightness Adjustment:** `GET /image-processing/brighten-image/:imageName/:factor`
+
+### Operasi Aritmetika
+
+- **Penjumlahan Citra:** `GET /image-processing/add-images/:imageName1/:imageName2`
+- **Pengurangan Citra:** `GET /image-processing/subtract-images/:imageName1/:imageName2`
+
+### Operasi Geometri
+
+- **Translasi Citra:** `GET /image-processing/translate-image/:imageName/:x/:y`
+- **Rotasi Citra:** `GET /image-processing/rotate-image/:imageName/:degrees`
+- **Flipping Citra:**
+  - Horizontal: `GET /image-processing/flip-image/:imageName/horizontal`
+  - Vertical: `GET /image-processing/flip-image/:imageName/vertical`
+- **Zooming Citra:** `GET /image-processing/zoom-image/:imageName/:factor`
