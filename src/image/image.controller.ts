@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Controller,
   Get,
   Param,
@@ -17,6 +18,11 @@ export class ImageController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('image'))
   uploadFile(@UploadedFile() file: Express.Multer.File) {
+    if (!file || !file.buffer) {
+      // Handle nilai falsy atau properti buffer yang tidak ada
+      throw new BadRequestException('Invalid file');
+    }
+
     return this.imageService.saveImage(
       file.buffer,
       'uploaded',
