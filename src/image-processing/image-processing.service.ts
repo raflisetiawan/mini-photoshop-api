@@ -359,7 +359,9 @@ export class ImageProcessingService {
     return normalizedHistogram;
   }
 
-  async applyHistogramEqualization(imageName: string): Promise<string> {
+  async applyHistogramEqualization(
+    imageName: string,
+  ): Promise<{ imagePath: string; histogram: number[] }> {
     const filePath = this.imageService.getImagePath(imageName);
 
     // Check if the file exists
@@ -370,8 +372,10 @@ export class ImageProcessingService {
     // Read the image using Jimp
     const image = await Jimp.read(filePath);
 
-    // Get the cumulative distribution function (CDF)
+    // Get the histogram
     const histogram = await this.getHistogram(imageName);
+
+    // Get the cumulative distribution function (CDF)
     const cdf = histogram.reduce((acc, count, index) => {
       acc[index] = (acc[index - 1] || 0) + count;
       return acc;
@@ -400,6 +404,6 @@ export class ImageProcessingService {
       `${imageName}`,
     );
 
-    return equalizedImagePath;
+    return { imagePath: equalizedImagePath, histogram };
   }
 }

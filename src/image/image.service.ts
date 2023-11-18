@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
-import imageSize from 'image-size';
+import { Image } from 'image-js';
 import Jimp from 'jimp';
 
 @Injectable()
@@ -55,24 +55,44 @@ export class ImageService {
     if (!fs.existsSync(filePath)) {
       throw new NotFoundException('Image not found');
     }
-
-    // Get image dimensions using the image-size library
-    const dimensions = imageSize(filePath);
-
-    // Get file size in bytes
-    const stats = fs.statSync(filePath);
-    const fileSizeInBytes = stats.size;
-
-    // Calculate bits per pixel (This might need more sophisticated logic based on image format)
-    const bitsPerPixel = Math.ceil(
-      (fileSizeInBytes * 8) / (dimensions.width * dimensions.height),
-    );
+    const fileBuffer = fs.readFileSync(filePath);
+    const image = await Image.load(fileBuffer);
 
     return {
-      width: dimensions.width,
-      height: dimensions.height,
-      fileSize: fileSizeInBytes,
-      bitsPerPixel: bitsPerPixel,
+      width: image.width,
+      height: image.height,
+      fileSize: image.size / 1024,
+      bitsPerPixel: image.bitDepth,
     };
+  }
+  getAllImageNames(): string[] {
+    const uploadDir = './uploads';
+    // Read all files in the upload directory and filter out non-image files
+    const files = fs
+      .readdirSync(uploadDir)
+      .filter((file) => this.isImageFile(file));
+    return files;
+  }
+
+  async getAllImages(): Promise<any> {
+    const uploadDir = './uploads';
+    const files = this.getAllImageNames();
+
+    const imageBuffers: any[] = [];
+
+    for (const file of files) {
+      const filePath = path.join(uploadDir, file);
+      const fileBuffer = fs.readFileSync(filePath);
+      imageBuffers.push({ file: fileBuffer, name: file });
+    }
+
+    return imageBuffers;
+  }
+
+  private isImageFile(file: string): boolean {
+    // Add logic to determine if the file is an image (you can use file extensions)
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
+    const ext = path.extname(file).toLowerCase();
+    return imageExtensions.includes(ext);
   }
 }

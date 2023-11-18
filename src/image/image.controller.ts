@@ -30,6 +30,12 @@ export class ImageController {
     );
   }
 
+  @Get('all')
+  async getAllImages(): Promise<Buffer[]> {
+    // Get buffers of all uploaded images
+    return this.imageService.getAllImages();
+  }
+
   @Get(':imageName')
   async getImage(@Param('imageName') imageName: string): Promise<any> {
     // Return the image based on the file name

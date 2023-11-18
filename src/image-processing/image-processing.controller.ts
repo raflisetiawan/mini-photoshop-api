@@ -104,7 +104,7 @@ export class ImageProcessingController {
   @Get('equalize-histogram/:imageName')
   async applyHistogramEqualization(
     @Param('imageName') imageName: string,
-  ): Promise<string> {
+  ): Promise<{ imagePath: string; histogram: number[] }> {
     return this.imageProcessingService.applyHistogramEqualization(imageName);
   }
 }
